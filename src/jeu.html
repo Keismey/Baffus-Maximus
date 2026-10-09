@@ -522,6 +522,26 @@ const coutUpg=(u,n)=>Math.round(u.base*Math.pow(1.7,n));
 
 /* ===== État & sauvegarde ===== */
 const SAVE='dpdb_save_v1';
+/* Langue : la page française (index.html) et la page anglaise (en.html) sont générées depuis ce fichier.
+   TRD traduit les textes déjà enregistrés dans la sauvegarde (noms tirés au sort, fiche, raisons de retraite…)
+   quand on change de langue ; il est rempli à la génération (vide ici). */
+const LANG='fr';
+const TRD={};
+const tr=s=>(typeof s==='string'&&TRD[s])||s;
+const trNom=n=>typeof n==='string'?n.split(' ').map(tr).join(' '):n;
+function traduireSauvegarde(){
+  if(!S)return;
+  const tx=o=>{if(!o)return;for(const k of ['plat','peur','reve','signe'])if(o[k])o[k]=tr(o[k]);if(o.taille)o.taille=LANG==='fr'?String(o.taille).replace('.',','):String(o.taille).replace(',','.')};
+  if(S.fam){S.fam.nom=tr(S.fam.nom);(S.fam.anc||[]).forEach(a=>{a.nom=trNom(a.nom);a.fin=tr(a.fin)})}
+  if(S.rival)S.rival.nom=tr(S.rival.nom);
+  if(S.g){const g=S.g;g.reconv=tr(g.reconv);g.dernierVainqueur=tr(g.dernierVainqueur);tx(g.fiche);if(g.adv)g.adv.nom=tr(g.adv.nom)}
+  (S.board||[]).forEach(e=>e.nom=trNom(e.nom));
+  if(S.ancien)S.ancien.nom=trNom(S.ancien.nom);
+}
+function changerLangue(){
+  try{localStorage.setItem('baffus_lang',LANG==='fr'?'en':'fr')}catch(e){}
+  sauver();location.href=LANG==='fr'?'en.html':'index.html';
+}
 let S=null;
 const R=Math.random,rint=(a,b)=>a+Math.floor(R()*(b-a+1));
 function sauver(){try{localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}}
@@ -1369,11 +1389,13 @@ function options(){
   modal(`<h2>Options</h2>
     <button class="btn clair" id="oMus">${S.mus!==false?'Couper la musique':'Activer la musique'}</button>
     <button class="btn clair" id="oSon">${S.son?'Couper les bruitages':'Activer les bruitages'}</button>
+    <button class="btn clair" id="oLang">${LANG==='fr'?'Play in English':'Jouer en français'}</button>
     <button class="btn clair" id="oAide">Revoir les règles</button>
     <button class="btn clair" id="oTitre">Retour à l’écran titre</button>
     <button class="btn" id="oFerme">Fermer</button>`,m=>{
     m.querySelector('#oSon').onclick=()=>{S.son=!S.son;sauver();options()};
     m.querySelector('#oMus').onclick=()=>{MUS.basculer(S.mus===false);options()};
+    m.querySelector('#oLang').onclick=changerLangue;
     m.querySelector('#oAide').onclick=()=>{fermerModal();tuto()};
     m.querySelector('#oTitre').onclick=()=>{fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continuer';$('bReset').hidden=false;requestAnimationFrame(animTitre)};
     m.querySelector('#oFerme').onclick=fermerModal;
@@ -2309,7 +2331,7 @@ function demarrerJeu(){
   if(!S.tuto)tuto();else if(!S.introVue)presentation();
 }
 function boot(){
-  S=charger()||nouvelEtat();migrer();
+  S=charger()||nouvelEtat();migrer();traduireSauvegarde();
   if(S.g&&S.g.retraite){/* reprise d'une retraite interrompue */}
   $('bJouer').textContent=S.fam?'Continuer':'Jouer';
   $('bReset').hidden=!S.fam;

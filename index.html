@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>(function(){try{var k='baffus_lang',q=new URLSearchParams(location.search).get('lang'),s=localStorage.getItem(k);if(q==='fr'||q==='en'){localStorage.setItem(k,q);s=q}var l=s||(/^fr/i.test((navigator.languages&&navigator.languages[0])||navigator.language||'fr')?'fr':'en');if(l==='en')location.replace('en.html')}catch(e){}})();</script>
 <title>Baffus Maximus</title>
 <meta name="description" content="Entraîne ton gladiateur avec des mini-jeux, envoie-le dans l'arène et fonde une dynastie de champions. Un jeu de Keismey Studio, jouable dans le navigateur.">
 <link rel="manifest" href="manifest.webmanifest">
@@ -15,6 +16,8 @@
 <meta property="og:title" content="Baffus Maximus">
 <meta property="og:description" content="Du pain, des baffes et une dynastie de gladiateurs. Un jeu de Keismey Studio.">
 <meta property="og:image" content="https://keismey.github.io/Baffus-Maximus/icons/icon-512.png">
+<link rel="alternate" hreflang="fr" href="https://keismey.github.io/Baffus-Maximus/?lang=fr">
+<link rel="alternate" hreflang="en" href="https://keismey.github.io/Baffus-Maximus/en.html?lang=en">
 <link rel="preload" href="fonts/lilita-one.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="fonts/nunito.woff" as="font" type="font/woff" crossorigin>
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
@@ -338,7 +341,7 @@ button:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
     <div class="actions">
       <button class="btn" id="bJouer">Jouer</button>
       <button class="btn clair petit" id="bReset" hidden>Nouvelle dynastie</button>
-      <div class="ver" id="ver" style="text-align:center">v1.0 · Keismey Studio</div>
+      <div class="ver" id="ver" style="text-align:center">v1.1 · Keismey Studio</div>
     </div>
   </div>
 
@@ -541,6 +544,26 @@ const coutUpg=(u,n)=>Math.round(u.base*Math.pow(1.7,n));
 
 /* ===== État & sauvegarde ===== */
 const SAVE='dpdb_save_v1';
+/* Langue : la page française (index.html) et la page anglaise (en.html) sont générées depuis ce fichier.
+   TRD traduit les textes déjà enregistrés dans la sauvegarde (noms tirés au sort, fiche, raisons de retraite…)
+   quand on change de langue ; il est rempli à la génération (vide ici). */
+const LANG='fr';
+const TRD={"Whatsitus": "Tartempius", "Thingamajigus": "Bidulus", "Cheesius": "Fromagius", "Picklus": "Cornichonus", "Sausagus": "Saucissus", "Grumpus": "Ronchonnus", "Potatus": "Patatrus", "Bigarmus": "Grosbras", "Backfirus": "Pétaradus", "Crumpetus": "Brioche", "Turnipus": "Navetus", "Stewus": "Cassoulus", "Gossipus": "Pipelettus", "Bogeymanus": "Croquemitus", "Snobbius": "Snobinus", "Swaggerus": "Crâneurus", "Pretentius": "Prétentius", "Braggartus": "Fanfaronus", "Haughticus": "Hautaincus", "his mother’s lentils": "les lentilles de sa mère", "garum (he’s the only one)": "le garum (il est le seul)", "bread dipped in wine": "le pain trempé dans le vin", "olives, by the bucketful": "les olives, par seaux entiers", "very smelly goat’s cheese": "le fromage de chèvre qui sent fort", "honeyed dates": "les dattes au miel", "barley porridge, for nostalgia’s sake": "la bouillie d’orge, par nostalgie", "pigeons": "les pigeons", "stairs": "les escaliers", "silence": "le silence", "senators": "les sénateurs", "geese (since training)": "les oies (depuis l’entraînement)", "goats": "les chèvres", "cold water": "l’eau froide", "his mother-in-law": "sa belle-mère", "opening a tavern": "ouvrir une taverne", "having a statue, even a small one": "avoir une statue, même petite", "winning without getting hurt": "gagner sans se faire mal", "being a poet (he can’t write)": "être poète (il ne sait pas écrire)", "riding an elephant": "monter sur un éléphant", "making his mother proud": "que sa mère soit fière de lui", "sleeping until noon, just once": "dormir jusqu’à midi, une fois", "snores in Latin": "ronfle en latin", "a scar he explains differently every time": "une cicatrice qu’il raconte différemment à chaque fois", "greets every pigeon": "salue tous les pigeons", "counts on his fingers, even up to three": "compte sur ses doigts, même jusqu’à trois", "talks to his shield": "parle à son bouclier", "wears socks with his sandals": "porte des chaussettes dans ses sandales", "always has an olive in his pocket": "a toujours une olive dans la poche", "is opening a chariot driving school": "ouvre une auto-école de chars", "is becoming an official sandal tester": "devient testeur officiel de sandales", "is going into wholesale olives": "se lance dans la vente d’olives en gros", "is teaching core workouts to senators": "enseigne le gainage aux sénateurs", "is becoming a cat’s bodyguard": "devient garde du corps d’un chat", "is opening a self-service slap tavern": "ouvre une taverne où l’on se sert soi-même des baffes", "is becoming a street mime (speciality: the invisible gladiator)": "devient mime de rue (spécialité : le gladiateur invisible)", "is writing a bestseller: “Falling with Grace”": "écrit un best-seller : « Tomber avec élégance »", "is becoming a permanent extra at the theatre in Pompeii": "devient figurant permanent au théâtre de Pompéi", "is raising geese. He says it’s therapeutic": "élève des oies. Il dit que c’est thérapeutique", "Gaius the Baker": "Gaius le Boulanger", "Marcus Toastus": "Marcus Tartinus", "The Great Broccolius": "Le Grand Brocolius", "Septimus Not-Pleased": "Septimus Pas-Content", "Brutus the Intern": "Brutus le Stagiaire", "Hortensia the Crusher": "Hortensia la Broyeuse", "Titus Grumpus": "Titus Ronchonus", "Flavius Too-Polite": "Flavius Trop-Poli", "Aurelia the Boar": "Aurélia la Sanglière", "The Temp Minotaur": "Le Minotaure Intérimaire", "Spurius the Sleepless": "Spurius l’Insomniaque", "Cassia Headbutt": "Cassia Coup-de-Boule", "Pompom the Thracian": "Pompon le Thrace", "Nero Junior": "Néron Junior", "The Retired Centurion": "Le Centurion Retraité", "Octavia Iron-Eater": "Octavia Mange-Fer", "Lucius the Slow": "Lucius Lent", "Big Crassus": "Gros Crassus", "Decimus Two-Left-Feet": "Décimus Deux-Gauches", "The Lost Gaul": "Le Gaulois Égaré", "Tullia Hardhead": "Tullia Tête-Dure", "Caligula (not that one)": "Caligula (pas celui-là)", "Varus Legionless": "Varus Sans-Légion", "The Retiarius with a Cold": "Le Rétiaire Enrhumé", "Three defeats": "Trois défaites", "Gone on tour": "Partie en tournée", "Married, olive seller": "Marié, marchand d’olives", "Gone to meditate in a barrel": "Parti méditer dans un tonneau"};
+const tr=s=>(typeof s==='string'&&TRD[s])||s;
+const trNom=n=>typeof n==='string'?n.split(' ').map(tr).join(' '):n;
+function traduireSauvegarde(){
+  if(!S)return;
+  const tx=o=>{if(!o)return;for(const k of ['plat','peur','reve','signe'])if(o[k])o[k]=tr(o[k]);if(o.taille)o.taille=LANG==='fr'?String(o.taille).replace('.',','):String(o.taille).replace(',','.')};
+  if(S.fam){S.fam.nom=tr(S.fam.nom);(S.fam.anc||[]).forEach(a=>{a.nom=trNom(a.nom);a.fin=tr(a.fin)})}
+  if(S.rival)S.rival.nom=tr(S.rival.nom);
+  if(S.g){const g=S.g;g.reconv=tr(g.reconv);g.dernierVainqueur=tr(g.dernierVainqueur);tx(g.fiche);if(g.adv)g.adv.nom=tr(g.adv.nom)}
+  (S.board||[]).forEach(e=>e.nom=trNom(e.nom));
+  if(S.ancien)S.ancien.nom=trNom(S.ancien.nom);
+}
+function changerLangue(){
+  try{localStorage.setItem('baffus_lang',LANG==='fr'?'en':'fr')}catch(e){}
+  sauver();location.href=LANG==='fr'?'en.html':'index.html';
+}
 let S=null;
 const R=Math.random,rint=(a,b)=>a+Math.floor(R()*(b-a+1));
 function sauver(){try{localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}}
@@ -1388,11 +1411,13 @@ function options(){
   modal(`<h2>Options</h2>
     <button class="btn clair" id="oMus">${S.mus!==false?'Couper la musique':'Activer la musique'}</button>
     <button class="btn clair" id="oSon">${S.son?'Couper les bruitages':'Activer les bruitages'}</button>
+    <button class="btn clair" id="oLang">${LANG==='fr'?'Play in English':'Jouer en français'}</button>
     <button class="btn clair" id="oAide">Revoir les règles</button>
     <button class="btn clair" id="oTitre">Retour à l’écran titre</button>
     <button class="btn" id="oFerme">Fermer</button>`,m=>{
     m.querySelector('#oSon').onclick=()=>{S.son=!S.son;sauver();options()};
     m.querySelector('#oMus').onclick=()=>{MUS.basculer(S.mus===false);options()};
+    m.querySelector('#oLang').onclick=changerLangue;
     m.querySelector('#oAide').onclick=()=>{fermerModal();tuto()};
     m.querySelector('#oTitre').onclick=()=>{fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continuer';$('bReset').hidden=false;requestAnimationFrame(animTitre)};
     m.querySelector('#oFerme').onclick=fermerModal;
@@ -2328,7 +2353,7 @@ function demarrerJeu(){
   if(!S.tuto)tuto();else if(!S.introVue)presentation();
 }
 function boot(){
-  S=charger()||nouvelEtat();migrer();
+  S=charger()||nouvelEtat();migrer();traduireSauvegarde();
   if(S.g&&S.g.retraite){/* reprise d'une retraite interrompue */}
   $('bJouer').textContent=S.fam?'Continuer':'Jouer';
   $('bReset').hidden=!S.fam;
