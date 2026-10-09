@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Baffus Maximus",
+  "short_name": "Baffus",
+  "description": "Entraîne ton gladiateur avec des mini-jeux, envoie-le dans l'arène et fonde une dynastie de champions.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#24101A",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
