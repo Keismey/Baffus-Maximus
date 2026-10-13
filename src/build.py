@@ -23,6 +23,9 @@ import i18n, en as EN
 VERSION_JEU = '1.1'
 SRC = (RACINE / 'src' / 'jeu.html').read_text(encoding='utf-8')
 
+# Suivi Cloudflare Web Analytics (version publiée uniquement, pas l'aperçu de test)
+CF_ANALYTICS = """<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cdb82226cd1b401d9e4f4e899f9b8425"}'></script><!-- End Cloudflare Web Analytics -->"""
+
 
 def remplacer(s, avant, apres, n=1):
     if s.count(avant) != n:
@@ -167,7 +170,7 @@ def page(lang, appli):
         if 'S.dev=!S.dev' in out:
             sys.exit('build : le raccourci du mode test est encore présent')
         n, m = MAJ_TXT[lang]
-        out = remplacer(out, '</body></html>', SW_JS.replace('__NOUVELLE__', n).replace('__MAJ__', m) + '</body></html>')
+        out = remplacer(out, '</body></html>', SW_JS.replace('__NOUVELLE__', n).replace('__MAJ__', m) + CF_ANALYTICS + '\n</body></html>')
     return out, inutiles, restes
 
 

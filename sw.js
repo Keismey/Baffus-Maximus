@@ -1,6 +1,6 @@
 // Baffus Maximus — service worker (généré par src/build.py depuis src/sw.template.js, ne pas modifier sw.js à la main).
 // Met tout le jeu en cache pour jouer hors ligne ; une nouvelle version propose « Mettre à jour ».
-const VERSION = 'baffus-1.1-58ebb16b';
+const VERSION = 'baffus-1.1-843a77d8';
 const CORE = [
   './',
   './index.html',
