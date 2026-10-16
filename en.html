@@ -341,7 +341,7 @@ button:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
     <div class="actions">
       <button class="btn" id="bJouer">Play</button>
       <button class="btn clair petit" id="bReset" hidden>New dynasty</button>
-      <div class="ver" id="ver" style="text-align:center">v1.1 · Keismey Studio</div>
+      <div class="ver" id="ver" style="text-align:center">v1.2 · Keismey Studio</div>
     </div>
   </div>
 
@@ -1407,18 +1407,37 @@ function ouvrirPanneau(k){
 }
 function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];COUR.y=COUR.ty=a[1];COUR.cible=null;ouvrirPanneau(k)}
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
+/* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
+const NOTES_MAJ=[
+  {v:'1.2',d:'16 October 2026',l:['New: these patch notes, in Options. They show once after each update.']},
+  {v:'1.1',d:'9 October 2026',l:['The game is now available in English.']},
+  {v:'1.0',d:'9 October 2026',l:['First online version of Baffus Maximus’s ludus.']},
+];
+function notesMaj(retour){
+  try{localStorage.setItem('baffus_notes',NOTES_MAJ[0].v)}catch(e){}
+  modal(`<h2>Patch notes</h2>${NOTES_MAJ.map((n,i)=>`<details${i?'':' open'} style="text-align:left;margin-bottom:8px"><summary style="cursor:pointer"><b>${n.v}</b> · ${n.d}</summary><ul style="margin:6px 0 0;padding-left:20px">${n.l.map(x=>`<li style="margin-bottom:4px">${x}</li>`).join('')}</ul></details>`).join('')}
+    <button class="btn" id="nFerme">Close</button>`,m=>{m.querySelector('#nFerme').onclick=()=>{fermerModal();if(retour)options()}});
+}
+/* Une fois après chaque mise à jour, seulement pour un joueur qui a déjà une partie. */
+function notesMajAuto(){
+  let vu=null;try{vu=localStorage.getItem('baffus_notes')}catch(e){return}
+  if(vu===NOTES_MAJ[0].v)return;
+  if(S.fam)setTimeout(()=>notesMaj(false),400);else try{localStorage.setItem('baffus_notes',NOTES_MAJ[0].v)}catch(e){}
+}
 function options(){
   modal(`<h2>Options</h2>
     <button class="btn clair" id="oMus">${S.mus!==false?'Mute music':'Turn music on'}</button>
     <button class="btn clair" id="oSon">${S.son?'Mute sound effects':'Turn sound effects on'}</button>
     <button class="btn clair" id="oLang">${LANG==='fr'?'Play in English':'Jouer en français'}</button>
     <button class="btn clair" id="oAide">Show the rules again</button>
+    <button class="btn clair" id="oNotes">Patch notes</button>
     <button class="btn clair" id="oTitre">Back to title screen</button>
     <button class="btn" id="oFerme">Close</button>`,m=>{
     m.querySelector('#oSon').onclick=()=>{S.son=!S.son;sauver();options()};
     m.querySelector('#oMus').onclick=()=>{MUS.basculer(S.mus===false);options()};
     m.querySelector('#oLang').onclick=changerLangue;
     m.querySelector('#oAide').onclick=()=>{fermerModal();tuto()};
+    m.querySelector('#oNotes').onclick=()=>notesMaj(true);
     m.querySelector('#oTitre').onclick=()=>{fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continue';$('bReset').hidden=false;requestAnimationFrame(animTitre)};
     m.querySelector('#oFerme').onclick=fermerModal;
   });
@@ -2357,6 +2376,7 @@ function boot(){
   if(S.g&&S.g.retraite){/* reprise d'une retraite interrompue */}
   $('bJouer').textContent=S.fam?'Continue':'Play';
   $('bReset').hidden=!S.fam;
+  notesMajAuto();
   $('bJouer').onclick=()=>{sfx('tap');demarrerJeu();if(S.g&&S.g.retraite)setTimeout(S.g.heritageFait?revelerHeritier:choixHeritage,50);else if(S.g&&S.g.L>=LIGUES.length)setTimeout(champion,50)};
   $('bReset').onclick=()=>modal(`<h2>New dynasty?</h2><p>All progress will be erased: family, upgrades, hall of champions.</p><button class="btn" id="rNon">Keep my game</button><button class="btn clair petit" id="rOui">Erase everything</button>`,m=>{m.querySelector('#rNon').onclick=fermerModal;m.querySelector('#rOui').onclick=()=>{const dev=S.dev;S=nouvelEtat();S.dev=dev;sauver();fermerModal();$('bJouer').textContent='Play';$('bReset').hidden=true}});
   

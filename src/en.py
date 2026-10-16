@@ -79,6 +79,12 @@ CONTEXTE = [
 ]
 
 TRAD = {
+    "Notes de mise à jour": "Patch notes",
+    "16 octobre 2026": "16 October 2026",
+    "9 octobre 2026": "9 October 2026",
+    "Nouveau : ces notes de mise à jour, dans les Options. Elles s’affichent une fois après chaque mise à jour.": "New: these patch notes, in Options. They show once after each update.",
+    "Le jeu existe maintenant en anglais.": "The game is now available in English.",
+    "Première version en ligne du ludus de Baffus Maximus.": "First online version of Baffus Maximus’s ludus.",
     # --- Écran de lancement, titre, barre du haut
     "Touche l’écran": "Tap the screen",
     "Gladiateurs de père en fils": "Gladiators, from father to son",

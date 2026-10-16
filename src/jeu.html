@@ -1385,18 +1385,37 @@ function ouvrirPanneau(k){
 }
 function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];COUR.y=COUR.ty=a[1];COUR.cible=null;ouvrirPanneau(k)}
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
+/* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
+const NOTES_MAJ=[
+  {v:'1.2',d:'16 octobre 2026',l:['Nouveau : ces notes de mise à jour, dans les Options. Elles s’affichent une fois après chaque mise à jour.']},
+  {v:'1.1',d:'9 octobre 2026',l:['Le jeu existe maintenant en anglais.']},
+  {v:'1.0',d:'9 octobre 2026',l:['Première version en ligne du ludus de Baffus Maximus.']},
+];
+function notesMaj(retour){
+  try{localStorage.setItem('baffus_notes',NOTES_MAJ[0].v)}catch(e){}
+  modal(`<h2>Notes de mise à jour</h2>${NOTES_MAJ.map((n,i)=>`<details${i?'':' open'} style="text-align:left;margin-bottom:8px"><summary style="cursor:pointer"><b>${n.v}</b> · ${n.d}</summary><ul style="margin:6px 0 0;padding-left:20px">${n.l.map(x=>`<li style="margin-bottom:4px">${x}</li>`).join('')}</ul></details>`).join('')}
+    <button class="btn" id="nFerme">Fermer</button>`,m=>{m.querySelector('#nFerme').onclick=()=>{fermerModal();if(retour)options()}});
+}
+/* Une fois après chaque mise à jour, seulement pour un joueur qui a déjà une partie. */
+function notesMajAuto(){
+  let vu=null;try{vu=localStorage.getItem('baffus_notes')}catch(e){return}
+  if(vu===NOTES_MAJ[0].v)return;
+  if(S.fam)setTimeout(()=>notesMaj(false),400);else try{localStorage.setItem('baffus_notes',NOTES_MAJ[0].v)}catch(e){}
+}
 function options(){
   modal(`<h2>Options</h2>
     <button class="btn clair" id="oMus">${S.mus!==false?'Couper la musique':'Activer la musique'}</button>
     <button class="btn clair" id="oSon">${S.son?'Couper les bruitages':'Activer les bruitages'}</button>
     <button class="btn clair" id="oLang">${LANG==='fr'?'Play in English':'Jouer en français'}</button>
     <button class="btn clair" id="oAide">Revoir les règles</button>
+    <button class="btn clair" id="oNotes">Notes de mise à jour</button>
     <button class="btn clair" id="oTitre">Retour à l’écran titre</button>
     <button class="btn" id="oFerme">Fermer</button>`,m=>{
     m.querySelector('#oSon').onclick=()=>{S.son=!S.son;sauver();options()};
     m.querySelector('#oMus').onclick=()=>{MUS.basculer(S.mus===false);options()};
     m.querySelector('#oLang').onclick=changerLangue;
     m.querySelector('#oAide').onclick=()=>{fermerModal();tuto()};
+    m.querySelector('#oNotes').onclick=()=>notesMaj(true);
     m.querySelector('#oTitre').onclick=()=>{fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continuer';$('bReset').hidden=false;requestAnimationFrame(animTitre)};
     m.querySelector('#oFerme').onclick=fermerModal;
   });
@@ -2335,6 +2354,7 @@ function boot(){
   if(S.g&&S.g.retraite){/* reprise d'une retraite interrompue */}
   $('bJouer').textContent=S.fam?'Continuer':'Jouer';
   $('bReset').hidden=!S.fam;
+  notesMajAuto();
   $('bJouer').onclick=()=>{sfx('tap');demarrerJeu();if(S.g&&S.g.retraite)setTimeout(S.g.heritageFait?revelerHeritier:choixHeritage,50);else if(S.g&&S.g.L>=LIGUES.length)setTimeout(champion,50)};
   $('bReset').onclick=()=>modal(`<h2>Nouvelle dynastie ?</h2><p>Toute la progression est effacée : famille, améliorations, panthéon.</p><button class="btn" id="rNon">Garder ma partie</button><button class="btn clair petit" id="rOui">Tout effacer</button>`,m=>{m.querySelector('#rNon').onclick=fermerModal;m.querySelector('#rOui').onclick=()=>{const dev=S.dev;S=nouvelEtat();S.dev=dev;sauver();fermerModal();$('bJouer').textContent='Jouer';$('bReset').hidden=true}});
   let taps=0;$('ver').onclick=()=>{if(++taps>=5){taps=0;S.dev=!S.dev;sauver();toast(S.dev?'Mode test activé':'Mode test désactivé')}};
