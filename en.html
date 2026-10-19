@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>(function(){try{var k='baffus_lang',q=new URLSearchParams(location.search).get('lang'),s=localStorage.getItem(k);if(q==='fr'||q==='en'){localStorage.setItem(k,q);s=q}if(s==='fr')location.replace('index.html')}catch(e){}})();</script>
+<script src="ks-back.js"></script>
 <title>Baffus Maximus</title>
 <meta name="description" content="Train your gladiator with mini-games, send him into the arena and found a dynasty of champions. A Keismey Studio game you can play in your browser.">
 <link rel="manifest" href="manifest.webmanifest">
@@ -341,7 +342,7 @@ button:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
     <div class="actions">
       <button class="btn" id="bJouer">Play</button>
       <button class="btn clair petit" id="bReset" hidden>New dynasty</button>
-      <div class="ver" id="ver" style="text-align:center">v1.2 · Keismey Studio</div>
+      <div class="ver" id="ver" style="text-align:center">v1.3 · Keismey Studio</div>
     </div>
   </div>
 
@@ -1409,6 +1410,7 @@ function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];CO
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
 /* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
 const NOTES_MAJ=[
+  {v:'1.3',d:'19 October 2026',l:['The phone’s back button no longer leaves the game at once: it closes windows and panels, then offers to go back to the title screen. From the title screen, it takes you to the Keismey Studio hub.']},
   {v:'1.2',d:'16 October 2026',l:['New: these patch notes, in Options. They show once after each update.']},
   {v:'1.1',d:'9 October 2026',l:['The game is now available in English.']},
   {v:'1.0',d:'9 October 2026',l:['First online version of Baffus Maximus’s ludus.']},
@@ -2371,6 +2373,25 @@ function demarrerJeu(){
   montrer('ludus');onglet=null;rendreLudus();bulle(ligne('idle'));
   if(!S.tuto)tuto();else if(!S.introVue)presentation();
 }
+/* ---------- bouton retour du téléphone (voir ks-back.js, ajouté par build.py) ----------
+   fenêtre ou panneau ouvert → fermé ; cour du ludus → écran titre (confirmé) ; écran titre → hub ;
+   entraînement ou combat en cours : ignoré. Les fenêtres qui demandent un choix restent ouvertes. */
+function retourTitre(){fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continue';$('bReset').hidden=false;requestAnimationFrame(animTitre)}
+function boutonRetour(){
+  const m=$('modal');
+  if(!m.hidden){
+    for(const id of ['kNon','nFerme','rNon']){const b=m.querySelector('#'+id);if(b){b.click();return}}
+    if(m.querySelector('#oTitre'))fermerModal();
+    return;
+  }
+  if(!$('titre').hidden)return'hub';
+  if(!$('mg').hidden){toast('Finish the session first.');return}
+  if(!$('combat').hidden){toast('Finish the fight first.');return}
+  if(!$('sheet').hidden){fermerPanneau();return}
+  modal(`<h2>Back to the title screen?</h2><p>Your dynasty is saved.</p><button class="btn" id="kOui">Title screen</button><button class="btn clair petit" id="kNon">Cancel</button>`,
+    b=>{b.querySelector('#kNon').onclick=fermerModal;b.querySelector('#kOui').onclick=retourTitre});
+}
+if(window.KSBack)KSBack.init({back:boutonRetour,lang:()=>LANG==='en'?'en':'fr'});
 function boot(){
   S=charger()||nouvelEtat();migrer();traduireSauvegarde();
   if(S.g&&S.g.retraite){/* reprise d'une retraite interrompue */}
