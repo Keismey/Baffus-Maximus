@@ -20,7 +20,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RACINE / 'src'))
 import i18n, en as EN
 
-VERSION_JEU = '1.3'
+VERSION_JEU = '1.4'
 SRC = (RACINE / 'src' / 'jeu.html').read_text(encoding='utf-8')
 
 # Suivi Cloudflare Web Analytics (version publiée uniquement, pas l'aperçu de test)
@@ -117,7 +117,7 @@ def tete(lang, appli):
 <html lang="{lang}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>{LANGUE_JS[lang]}</script>
-{'<script src="ks-back.js"></script>' if appli else ''}
+{'<script src="ks-studio.js"></script><script src="ks-back.js"></script>' if appli else ''}
 <title>Baffus Maximus</title>
 <meta name="description" content="{d}">
 <meta property="og:type" content="website">
@@ -194,7 +194,7 @@ m = re.search(r'id="titreBg" alt="" src="data:image/webp;base64,([A-Za-z0-9+/=]+
 (RACINE / 'a').mkdir(exist_ok=True)
 (RACINE / 'a' / 'titre.webp').write_bytes(base64.b64decode(m.group(1)))
 
-fichiers = ['index.html', 'en.html', 'ks-back.js', 'manifest.webmanifest', 'a/titre.webp',
+fichiers = ['index.html', 'en.html', 'ks-studio.js', 'ks-back.js', 'manifest.webmanifest', 'a/titre.webp',
             'fonts/lilita-one.woff', 'fonts/nunito.woff',
             'icons/apple-touch-icon.png', 'icons/favicon.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png']
 fichiers += sorted('musique/' + p.name for p in (RACINE / 'musique').glob('*.mp3'))

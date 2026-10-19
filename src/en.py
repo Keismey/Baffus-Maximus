@@ -80,6 +80,8 @@ CONTEXTE = [
 
 TRAD = {
     "19 octobre 2026": "19 October 2026",
+    "Options : réglage du volume de la musique et des bruitages, sauvegarde à exporter ou importer (pour changer d’appareil), signalement de bug et soutien au studio.": "Options: music and sound effects volume, a save you can export or import (to switch devices), bug reports and studio support.",
+    "Le navigateur est invité à garder ta sauvegarde même quand il fait du ménage.": "The browser is asked to keep your save even when it clears space.",
     "Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il propose d’aller au hub Keismey Studio.": "The phone’s back button no longer leaves the game at once: it closes windows and panels, then offers to go back to the title screen. From the title screen, it offers to go to the Keismey Studio hub.",
     "Quitter Baffus Maximus ?": "Leave Baffus Maximus?",
     "Ta dynastie est enregistrée. Tu retrouveras les autres jeux de Keismey Studio sur le hub.": "Your dynasty is saved. You will find the other Keismey Studio games on the hub.",
@@ -112,10 +114,11 @@ TRAD = {
     "Passer": "Skip",
     "Série": "Run",
     "Gén.": "Gen.",
-    "Couper la musique": "Mute music",
-    "Activer la musique": "Turn music on",
-    "Couper les bruitages": "Mute sound effects",
-    "Activer les bruitages": "Turn sound effects on",
+    "Musique": "Music",
+    "Bruitages": "Sound effects",
+    "Sauvegarde (exporter / importer)": "Save (export / import)",
+    "Signaler un bug": "Report a bug",
+    "Soutenir le studio": "Support the studio",
     "Revoir les règles": "Show the rules again",
     "Retour à l’écran titre": "Back to title screen",
 

@@ -2,7 +2,7 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script>(function(){try{var k='baffus_lang',q=new URLSearchParams(location.search).get('lang'),s=localStorage.getItem(k);if(q==='fr'||q==='en'){localStorage.setItem(k,q);s=q}var l=s||(/^fr/i.test((navigator.languages&&navigator.languages[0])||navigator.language||'fr')?'fr':'en');if(l==='en')location.replace('en.html')}catch(e){}})();</script>
-<script src="ks-back.js"></script>
+<script src="ks-studio.js"></script><script src="ks-back.js"></script>
 <title>Baffus Maximus</title>
 <meta name="description" content="Entraîne ton gladiateur avec des mini-jeux, envoie-le dans l'arène et fonde une dynastie de champions. Un jeu de Keismey Studio, jouable dans le navigateur.">
 <meta property="og:type" content="website">
@@ -71,6 +71,7 @@ button:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
 .btn.vert{background:var(--laurier)}
 .btn.bleu{background:var(--ciel)}
 .btn.clair{background:var(--papyrus);color:var(--ink)}
+.curseur{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink)}.curseur span{min-width:118px;text-align:left}.curseur input{flex:1;accent-color:#B8452E;height:28px}
 .btn.petit{font-size:16px;padding:8px 12px;border-radius:11px}
 .btn[disabled]{filter:grayscale(.8) brightness(.9);opacity:.6;pointer-events:none}
 .plaque{background:var(--papyrus);border:3px solid var(--ink);border-radius:16px;box-shadow:0 4px 0 var(--ombre)}
@@ -351,7 +352,7 @@ button:focus-visible{outline:3px solid var(--ciel);outline-offset:2px}
     <div class="actions">
       <button class="btn" id="bJouer">Jouer</button>
       <button class="btn clair petit" id="bReset" hidden>Nouvelle dynastie</button>
-      <div class="ver" id="ver" style="text-align:center">v1.3 · Keismey Studio</div>
+      <div class="ver" id="ver" style="text-align:center">v1.4 · Keismey Studio</div>
     </div>
   </div>
 
@@ -785,17 +786,20 @@ function ligne(cat,g=S.g){const l=TRAITS[g.trait].l[cat];return pick(l)}
 
 /* ===== Sons (WebAudio, très légers) ===== */
 let AC=null;
-let _bruit=null;
+let _bruit=null,_busSfx=null;
+function volM(){return S&&S.mv!=null?S.mv:(S&&S.mus===false?0:1)}
+function volS(){return S&&S.sv!=null?S.sv:(S&&S.son===false?0:1)}
+function busSfx(){if(!_busSfx){_busSfx=AC.createGain();_busSfx.connect(AC.destination)}_busSfx.gain.value=volS();return _busSfx}
 function bruit(){if(_bruit)return _bruit;const n=AC.sampleRate*1.5,bf=AC.createBuffer(1,n,AC.sampleRate),d=bf.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;return _bruit=bf}
-function _osc(type,f0,f1,dur,vol,t0=0,dest){const n=AC.currentTime+t0,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f0,n);if(f1)o.frequency.exponentialRampToValueAtTime(f1,n+dur);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(vol,n+.008);g.gain.exponentialRampToValueAtTime(.0001,n+dur);o.connect(g).connect(dest||AC.destination);o.start(n);o.stop(n+dur+.03);return o}
-function _bruitF(type,f,q,dur,vol,t0=0,att=.005){const n=AC.currentTime+t0,s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();s.buffer=bruit();fl.type=type;fl.frequency.value=f;fl.Q.value=q;g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(vol,n+att);g.gain.exponentialRampToValueAtTime(.0001,n+dur);s.connect(fl).connect(g).connect(AC.destination);s.start(n,Math.random()*.5);s.stop(n+dur+.05)}
+function _osc(type,f0,f1,dur,vol,t0=0,dest){const n=AC.currentTime+t0,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f0,n);if(f1)o.frequency.exponentialRampToValueAtTime(f1,n+dur);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(vol,n+.008);g.gain.exponentialRampToValueAtTime(.0001,n+dur);o.connect(g).connect(dest||busSfx());o.start(n);o.stop(n+dur+.03);return o}
+function _bruitF(type,f,q,dur,vol,t0=0,att=.005){const n=AC.currentTime+t0,s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();s.buffer=bruit();fl.type=type;fl.frequency.value=f;fl.Q.value=q;g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(vol,n+att);g.gain.exponentialRampToValueAtTime(.0001,n+dur);s.connect(fl).connect(g).connect(busSfx());s.start(n,Math.random()*.5);s.stop(n+dur+.05)}
 /* ===== Musique (fichiers mp3, gain WebAudio pour des fondus qui marchent aussi sur iOS) =====
    (silences de début retirés des fichiers) · b : début du fondu final (relais en fondu enchaîné pour boucler) · v : volume */
 const MUS={
   P:{titre:{a:0,b:32.0,v:.55,l:1},ludus:{a:0,b:99.8,v:.42,l:1},arene:{a:0,b:95.85,v:.42,l:1},minijeux:{a:0,b:119.2,v:.36,l:1},victoire:{a:0,v:.6,l:0},defaite:{a:0,v:.6,l:0},gazette:{a:0,b:176.6,v:.45,l:1}},
   cur:null,ok:false,voix:[],xf:1.8,maitre:null,
   noeud(el){
-    try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(!this.maitre){this.maitre=AC.createGain();this.maitre.connect(AC.destination)}
+    try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(!this.maitre){this.maitre=AC.createGain();this.maitre.gain.value=volM();this.maitre.connect(AC.destination)}
       const src=AC.createMediaElementSource(el),g=AC.createGain();g.gain.value=0;src.connect(g).connect(this.maitre);return g}catch(e){return null}
   },
   fondu(v,cible,dur){
@@ -826,6 +830,7 @@ const MUS={
     if(this.ok)return;this.ok=true;try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}
     if(this.cur&&S.mus!==false){const k=this.cur;this.cur=null;this.jouer(k)}
   },
+  volume(v){S.mv=v;if(this.maitre)this.maitre.gain.value=v;const on=v>0;if(on===(S.mus!==false)){sauver();return}this.basculer(on)},
   basculer(on){S.mus=on;sauver();if(on){const k=this.cur;this.cur=null;this.jouer(k)}else{for(const v of [...this.voix])this.arreter(v,.5)}}
 };
 const ECRAN_MUS={titre:'titre',ludus:'ludus',mg:'minijeux',combat:'arene'};
@@ -838,7 +843,7 @@ document.addEventListener('visibilitychange',()=>{
   else{try{AC&&AC.resume()}catch(e){};for(const v of MUS.voix)if(!v.fin){const p=v.el.play();if(p&&p.catch)p.catch(()=>{})}}
 });
 function sfx(t){
-  if(!S||!S.son)return;
+  if(!S||!S.son||volS()<=0)return;
   try{
     if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
     if(AC.state==='suspended')AC.resume();
@@ -1419,6 +1424,7 @@ function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];CO
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
 /* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
 const NOTES_MAJ=[
+  {v:'1.4',d:'19 octobre 2026',l:['Options : réglage du volume de la musique et des bruitages, sauvegarde à exporter ou importer (pour changer d’appareil), signalement de bug et soutien au studio.','Le navigateur est invité à garder ta sauvegarde même quand il fait du ménage.']},
   {v:'1.3',d:'19 octobre 2026',l:['Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il propose d’aller au hub Keismey Studio.']},
   {v:'1.2',d:'16 octobre 2026',l:['Nouveau : ces notes de mise à jour, dans les Options. Elles s’affichent une fois après chaque mise à jour.']},
   {v:'1.1',d:'9 octobre 2026',l:['Le jeu existe maintenant en anglais.']},
@@ -1436,19 +1442,28 @@ function notesMajAuto(){
   if(S.fam)setTimeout(()=>notesMaj(false),400);else try{localStorage.setItem('baffus_notes',NOTES_MAJ[0].v)}catch(e){}
 }
 function options(){
+  const pc=v=>Math.round(v*100);
   modal(`<h2>Options</h2>
-    <button class="btn clair" id="oMus">${S.mus!==false?'Couper la musique':'Activer la musique'}</button>
-    <button class="btn clair" id="oSon">${S.son?'Couper les bruitages':'Activer les bruitages'}</button>
+    <label class="curseur"><span>Musique</span><input type="range" min="0" max="100" step="5" id="oMusV" value="${pc(volM())}"></label>
+    <label class="curseur"><span>Bruitages</span><input type="range" min="0" max="100" step="5" id="oSonV" value="${pc(volS())}"></label>
     <button class="btn clair" id="oLang">${LANG==='fr'?'Play in English':'Jouer en français'}</button>
     <button class="btn clair" id="oAide">Revoir les règles</button>
     <button class="btn clair" id="oNotes">Notes de mise à jour</button>
+    <button class="btn clair" id="oSauve">Sauvegarde (exporter / importer)</button>
+    <button class="btn clair" id="oBug">Signaler un bug</button>
+    <button class="btn clair" id="oSoutien">Soutenir le studio</button>
     <button class="btn clair" id="oTitre">Retour à l’écran titre</button>
     <button class="btn" id="oFerme">Fermer</button>`,m=>{
-    m.querySelector('#oSon').onclick=()=>{S.son=!S.son;sauver();options()};
-    m.querySelector('#oMus').onclick=()=>{MUS.basculer(S.mus===false);options()};
+    m.querySelector('#oMusV').oninput=e=>MUS.volume(e.target.value/100);
+    m.querySelector('#oSonV').oninput=e=>{S.sv=e.target.value/100;S.son=S.sv>0;if(_busSfx)_busSfx.gain.value=S.sv};
+    m.querySelector('#oSonV').onchange=()=>{sauver();sfx('tap')};
+    m.querySelector('#oMusV').onchange=()=>sauver();
     m.querySelector('#oLang').onclick=changerLangue;
     m.querySelector('#oAide').onclick=()=>{fermerModal();tuto()};
     m.querySelector('#oNotes').onclick=()=>notesMaj(true);
+    m.querySelector('#oSauve').onclick=()=>{if(window.KS)KS.saveDialog({keys:[SAVE],lang:LANG==='en'?'en':'fr',save:sauver,accent:'#E0A93B'})};
+    m.querySelector('#oBug').onclick=()=>{if(window.KS)KS.bug('Baffus Maximus',LANG==='en'?'en':'fr')};
+    m.querySelector('#oSoutien').onclick=()=>{if(window.KS)KS.support()};
     m.querySelector('#oTitre').onclick=()=>{fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continuer';$('bReset').hidden=false;requestAnimationFrame(animTitre)};
     m.querySelector('#oFerme').onclick=fermerModal;
   });
