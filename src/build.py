@@ -105,10 +105,6 @@ def tete(lang, appli):
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Baffus Maximus">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Baffus Maximus">
-<meta property="og:description" content="{og}">
-<meta property="og:image" content="https://keismey.github.io/Baffus-Maximus/icons/icon-512.png">
 <link rel="alternate" hreflang="fr" href="https://keismey.github.io/Baffus-Maximus/?lang=fr">
 <link rel="alternate" hreflang="en" href="https://keismey.github.io/Baffus-Maximus/en.html?lang=en">
 <link rel="preload" href="fonts/lilita-one.woff" as="font" type="font/woff" crossorigin>
@@ -124,6 +120,19 @@ def tete(lang, appli):
 {'<script src="ks-back.js"></script>' if appli else ''}
 <title>Baffus Maximus</title>
 <meta name="description" content="{d}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Keismey Studio">
+<meta property="og:title" content="Baffus Maximus">
+<meta property="og:description" content="{og}">
+<meta property="og:url" content="https://keismey.github.io/Baffus-Maximus/">
+<meta property="og:image" content="https://keismey.github.io/Baffus-Maximus/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Baffus Maximus · Keismey Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Baffus Maximus">
+<meta name="twitter:description" content="{og}">
+<meta name="twitter:image" content="https://keismey.github.io/Baffus-Maximus/og.jpg">
 {pwa}{gfonts}<style>{STYLE_BASE}
 {polices}
 </style>
