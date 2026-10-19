@@ -8,17 +8,15 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Keismey Studio">
 <meta property="og:title" content="Baffus Maximus">
-<meta property="og:description" content="Entraîne ton gladiateur à coups de mini-jeux, envoie-le dans l’arène et fonde une dynastie de champions. Gratuit, sans pub, dans le navigateur.">
+<meta property="og:description" content="Du pain, des baffes et une dynastie de gladiateurs. Un jeu de Keismey Studio.">
 <meta property="og:url" content="https://keismey.github.io/Baffus-Maximus/">
 <meta property="og:image" content="https://keismey.github.io/Baffus-Maximus/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Baffus Maximus · Keismey Studio">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:locale:alternate" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Baffus Maximus">
-<meta name="twitter:description" content="Entraîne ton gladiateur à coups de mini-jeux, envoie-le dans l’arène et fonde une dynastie de champions. Gratuit, sans pub, dans le navigateur.">
+<meta name="twitter:description" content="Du pain, des baffes et une dynastie de gladiateurs. Un jeu de Keismey Studio.">
 <meta name="twitter:image" content="https://keismey.github.io/Baffus-Maximus/og.jpg">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#24101A">
@@ -1421,7 +1419,7 @@ function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];CO
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
 /* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
 const NOTES_MAJ=[
-  {v:'1.3',d:'19 octobre 2026',l:['Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il ramène au hub Keismey Studio.']},
+  {v:'1.3',d:'19 octobre 2026',l:['Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il propose d’aller au hub Keismey Studio.']},
   {v:'1.2',d:'16 octobre 2026',l:['Nouveau : ces notes de mise à jour, dans les Options. Elles s’affichent une fois après chaque mise à jour.']},
   {v:'1.1',d:'9 octobre 2026',l:['Le jeu existe maintenant en anglais.']},
   {v:'1.0',d:'9 octobre 2026',l:['Première version en ligne du ludus de Baffus Maximus.']},
@@ -2385,7 +2383,7 @@ function demarrerJeu(){
   if(!S.tuto)tuto();else if(!S.introVue)presentation();
 }
 /* ---------- bouton retour du téléphone (voir ks-back.js, ajouté par build.py) ----------
-   fenêtre ou panneau ouvert → fermé ; cour du ludus → écran titre (confirmé) ; écran titre → hub ;
+   fenêtre ou panneau ouvert → fermé ; cour du ludus → écran titre (confirmé) ; écran titre → hub (confirmé) ;
    entraînement ou combat en cours : ignoré. Les fenêtres qui demandent un choix restent ouvertes. */
 function retourTitre(){fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continuer';$('bReset').hidden=false;requestAnimationFrame(animTitre)}
 function boutonRetour(){
@@ -2395,7 +2393,8 @@ function boutonRetour(){
     if(m.querySelector('#oTitre'))fermerModal();
     return;
   }
-  if(!$('titre').hidden)return'hub';
+  if(!$('titre').hidden){modal(`<h2>Quitter Baffus Maximus ?</h2><p>Ta dynastie est enregistrée. Tu retrouveras les autres jeux de Keismey Studio sur le hub.</p><button class="btn" id="kOui">Aller au hub</button><button class="btn clair petit" id="kNon">Annuler</button>`,
+    b=>{b.querySelector('#kNon').onclick=fermerModal;b.querySelector('#kOui').onclick=()=>{fermerModal();KSBack.toHub()}});return}
   if(!$('mg').hidden){toast('Termine d’abord la séance.');return}
   if(!$('combat').hidden){toast('Termine d’abord le combat.');return}
   if(!$('sheet').hidden){fermerPanneau();return}
