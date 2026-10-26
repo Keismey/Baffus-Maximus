@@ -99,7 +99,11 @@ TRAD = {
     "Le jeu existe maintenant en anglais.": "The game is now available in English.",
     "Première version en ligne du ludus de Baffus Maximus.": "First online version of Baffus Maximus’s ludus.",
     # --- Écran de lancement, titre, barre du haut
-    "Touche l’écran": "Tap the screen",
+    "Touche pour commencer": "Tap to start",
+    "Conception et direction : Keismey · Développé avec l’aide d’outils IA": "Design and direction: Keismey · Developed with the help of AI tools",
+    "26 octobre 2026": "26 October 2026",
+    "Écran de lancement : « Touche pour commencer », comme dans les autres jeux du studio.": "Launch screen: “Tap to start”, like the studio’s other games.",
+    "Options : numéro de version et crédits du jeu.": "Options: version number and game credits.",
     "Gladiateurs de père en fils": "Gladiators, from father to son",
     "Ludus ouvert à tous les talents": "A ludus open to all talents",
     "Jouer": "Play",
