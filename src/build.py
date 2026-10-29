@@ -6,7 +6,8 @@ Ce script écrit à la racine du dépôt :
   - index.html  : le jeu en français
   - en.html     : le jeu en anglais (traduction : src/en.py, repérage des textes : src/i18n.py)
   - sw.js       : le service worker, dont le nom de cache change à chaque build
-  - a/titre.webp: l'illustration du titre (couverture du hub)
+  - a/*.webp    : les images du jeu, sorties de la page pour qu'elle s'affiche vite
+                  (a/titre.webp sert aussi de couverture au hub)
 Les deux pages ont l'en-tête d'appli (manifest, icônes), les polices locales, le mode hors ligne,
 et pas de mode test (5 touches sur la version).
 
@@ -20,7 +21,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RACINE / 'src'))
 import i18n, en as EN
 
-VERSION_JEU = '1.4.1'
+VERSION_JEU = '1.4.2'
 SRC = (RACINE / 'src' / 'jeu.html').read_text(encoding='utf-8')
 
 # Suivi Cloudflare Web Analytics (version publiée uniquement, pas l'aperçu de test)
@@ -107,11 +108,11 @@ def tete(lang, appli):
 <meta name="apple-mobile-web-app-title" content="Baffus Maximus">
 <link rel="alternate" hreflang="fr" href="https://keismey.github.io/Baffus-Maximus/?lang=fr">
 <link rel="alternate" hreflang="en" href="https://keismey.github.io/Baffus-Maximus/en.html?lang=en">
-<link rel="preload" href="fonts/lilita-one.woff" as="font" type="font/woff" crossorigin>
-<link rel="preload" href="fonts/nunito.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="fonts/lilita-one.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/nunito.woff2" as="font" type="font/woff2" crossorigin>
 ''' if appli else ''
-    polices = ('''@font-face{font-family:'Lilita One';src:url(fonts/lilita-one.woff) format('woff');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Nunito';src:url(fonts/nunito.woff) format('woff');font-weight:600 900;font-style:normal;font-display:swap}''' if appli else '')
+    polices = ('''@font-face{font-family:'Lilita One';src:url(fonts/lilita-one.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Nunito';src:url(fonts/nunito.woff2) format('woff2');font-weight:600 900;font-style:normal;font-display:swap}''' if appli else '')
     gfonts = '' if appli else '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap">\n'
     return f'''<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8">
@@ -184,29 +185,60 @@ def page(lang, appli):
     return out, inutiles, restes
 
 
+# ---------- Images en fichiers à part ----------
+# Les images de src/jeu.html (data:image/webp) sont écrites dans a/<nom>.webp et la page n'en garde que le chemin :
+# elle passe de 3,3 Mo à quelques centaines de Ko, et les images arrivent en parallèle. Les toutes petites restent dans la page.
+IMAGES = {}
+
+
+def externaliser(out):
+    def nom(m):
+        avant = out[max(0, m.start() - 80):m.start()]
+        k = re.search(r'''(?:\[\s*'([a-z0-9_]+)',\s*'|"([a-z0-9_]+)":\s*"|id="([A-Za-z0-9_]+)"[^>]*src=")$''', avant)
+        return next((x for x in k.groups() if x), None) if k else None
+
+    def un(m):
+        brut = base64.b64decode(m.group(1))
+        if len(brut) < 12000:
+            return m.group(0)
+        n = nom(m) or hashlib.sha256(brut).hexdigest()[:10]
+        n = {'titreBg': 'titre'}.get(n, n)
+        if IMAGES.get(n, brut) != brut:
+            n += '-' + hashlib.sha256(brut).hexdigest()[:6]
+        IMAGES[n] = brut
+        return f'a/{n}.webp'
+    return re.sub(r'data:image/webp;base64,([A-Za-z0-9+/=]+)', un, out)
+
+
 # ---------- Écriture ----------
 fr, _, _ = page('fr', True)
 en, inutiles, restes = page('en', True)
+fr, en = externaliser(fr), externaliser(en)
 (RACINE / 'index.html').write_text(fr, encoding='utf-8')
 (RACINE / 'en.html').write_text(en, encoding='utf-8')
 
-m = re.search(r'id="titreBg" alt="" src="data:image/webp;base64,([A-Za-z0-9+/=]+)"', SRC)
 (RACINE / 'a').mkdir(exist_ok=True)
-(RACINE / 'a' / 'titre.webp').write_bytes(base64.b64decode(m.group(1)))
+for f in (RACINE / 'a').glob('*.webp'):
+    if f.stem not in IMAGES:
+        f.unlink()
+for n, brut in IMAGES.items():
+    (RACINE / 'a' / f'{n}.webp').write_bytes(brut)
 
-fichiers = ['index.html', 'en.html', 'ks-studio.js', 'ks-back.js', 'manifest.webmanifest', 'a/titre.webp',
-            'fonts/lilita-one.woff', 'fonts/nunito.woff',
+# mis en cache à l'installation (hors ligne) ; les musiques, elles, sont gardées au fil de l'écoute
+fichiers = ['index.html', 'en.html', 'ks-studio.js', 'ks-back.js', 'manifest.webmanifest',
+            'fonts/lilita-one.woff2', 'fonts/nunito.woff2',
             'icons/apple-touch-icon.png', 'icons/favicon.png', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png']
-fichiers += sorted('musique/' + p.name for p in (RACINE / 'musique').glob('*.mp3'))
+fichiers += sorted(f'a/{n}.webp' for n in IMAGES)
+musiques = sorted('musique/' + p.name for p in (RACINE / 'musique').glob('*.mp3'))
 h = hashlib.sha256()
-for f in fichiers:
+for f in fichiers + musiques:
     h.update((RACINE / f).read_bytes())
 empreinte = h.hexdigest()[:8]
 gabarit = (RACINE / 'src' / 'sw.template.js').read_text(encoding='utf-8')
 liste = ',\n'.join(f"  './{f}'" for f in fichiers)
 sw = gabarit.replace('__VERSION__', f'baffus-{VERSION_JEU}-{empreinte}').replace('__FICHIERS__', "  './',\n" + liste)
 (RACINE / 'sw.js').write_text(sw, encoding='utf-8')
-print(f'index.html ({len(fr)//1024} Ko), en.html ({len(en)//1024} Ko), sw.js (cache baffus-{VERSION_JEU}-{empreinte}), a/titre.webp')
+print(f'index.html ({len(fr)//1024} Ko), en.html ({len(en)//1024} Ko), sw.js (cache baffus-{VERSION_JEU}-{empreinte}), {len(IMAGES)} images dans a/')
 
 if inutiles:
     print(f'\n{len(inutiles)} clé(s) de traduction jamais utilisées :')

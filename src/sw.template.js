@@ -1,5 +1,5 @@
 // Baffus Maximus — service worker (généré par src/build.py depuis src/sw.template.js, ne pas modifier sw.js à la main).
-// Met tout le jeu en cache pour jouer hors ligne ; une nouvelle version propose « Mettre à jour ».
+// Met tout le jeu en cache pour jouer hors ligne (les musiques au fil de l'écoute) ; une nouvelle version propose « Mettre à jour ».
 const VERSION = '__VERSION__';
 const CORE = [
 __FICHIERS__
@@ -33,7 +33,8 @@ self.addEventListener('fetch', e => {
   const range = req.headers.get('range');
   if (range && url.pathname.endsWith('.mp3')) {
     e.respondWith(caches.match(req, { ignoreSearch: true }).then(async hit => {
-      if (!hit) return fetch(req);
+      // pas encore en cache : on laisse passer la requête et on garde le fichier entier pour la prochaine fois
+      if (!hit) { e.waitUntil(fetch(url.pathname).then(r => { if (r.ok && r.status === 200) return caches.open(VERSION).then(c => c.put(url.pathname, r)); }).catch(() => {})); return fetch(req); }
       const buf = await hit.arrayBuffer(), m = /bytes=(\d*)-(\d*)/.exec(range) || [];
       const start = m[1] ? +m[1] : 0, end = m[2] ? Math.min(+m[2], buf.byteLength - 1) : buf.byteLength - 1;
       return new Response(buf.slice(start, end + 1), { status: 206, headers: {

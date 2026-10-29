@@ -86,6 +86,8 @@ TRAD = {
     "Quitter Baffus Maximus ?": "Leave Baffus Maximus?",
     "Ta dynastie est enregistrée. Tu retrouveras les autres jeux de Keismey Studio sur le hub.": "Your dynasty is saved. You will find the other Keismey Studio games on the hub.",
     "Aller au hub": "Go to the hub",
+    "Retour au hub": "Back to the hub",
+    "Options : bouton « Retour au hub », et le même ordre que dans les autres jeux du studio.": "Options: a “Back to the hub” button, in the same order as the studio’s other games.",
     "Retour à l’écran titre ?": "Back to the title screen?",
     "Ta dynastie est enregistrée.": "Your dynasty is saved.",
     "Écran titre": "Title screen",
@@ -101,6 +103,9 @@ TRAD = {
     # --- Écran de lancement, titre, barre du haut
     "Touche pour commencer": "Tap to start",
     "Conception et direction : Keismey · Développé avec l’aide d’outils IA": "Design and direction: Keismey · Developed with the help of AI tools",
+    "29 octobre 2026": "29 October 2026",
+    "Le jeu démarre bien plus vite : la page est dix fois plus légère, les images arrivent à part.": "The game starts much faster: the page is ten times lighter and the pictures come separately.",
+    "Les musiques ne sont téléchargées qu’au moment de les écouter.": "Music is only downloaded when it plays.",
     "26 octobre 2026": "26 October 2026",
     "Écran de lancement : « Touche pour commencer », comme dans les autres jeux du studio.": "Launch screen: “Tap to start”, like the studio’s other games.",
     "Options : numéro de version et crédits du jeu.": "Options: version number and game credits.",

@@ -1392,6 +1392,7 @@ function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];CO
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
 /* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
 const NOTES_MAJ=[
+  {v:'1.4.2',d:'29 octobre 2026',l:['Le jeu démarre bien plus vite : la page est dix fois plus légère, les images arrivent à part.','Les musiques ne sont téléchargées qu’au moment de les écouter.','Options : bouton « Retour au hub », et le même ordre que dans les autres jeux du studio.']},
   {v:'1.4.1',d:'26 octobre 2026',l:['Écran de lancement : « Touche pour commencer », comme dans les autres jeux du studio.','Options : numéro de version et crédits du jeu.']},
   {v:'1.4',d:'19 octobre 2026',l:['Options : réglage du volume de la musique et des bruitages, sauvegarde à exporter ou importer (pour changer d’appareil), signalement de bug et soutien au studio.','Le navigateur est invité à garder ta sauvegarde même quand il fait du ménage.']},
   {v:'1.3',d:'19 octobre 2026',l:['Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il propose d’aller au hub Keismey Studio.']},
@@ -1416,12 +1417,13 @@ function options(){
     <label class="curseur"><span>Musique</span><input type="range" min="0" max="100" step="5" id="oMusV" value="${pc(volM())}"></label>
     <label class="curseur"><span>Bruitages</span><input type="range" min="0" max="100" step="5" id="oSonV" value="${pc(volS())}"></label>
     <button class="btn clair" id="oLang">${LANG==='fr'?'Play in English':'Jouer en français'}</button>
+    <button class="btn clair" id="oSauve">Sauvegarde (exporter / importer)</button>
     <button class="btn clair" id="oAide">Revoir les règles</button>
     <button class="btn clair" id="oNotes">Notes de mise à jour</button>
-    <button class="btn clair" id="oSauve">Sauvegarde (exporter / importer)</button>
+    <button class="btn clair" id="oTitre">Retour à l’écran titre</button>
     <button class="btn clair" id="oBug">Signaler un bug</button>
     <button class="btn clair" id="oSoutien">Soutenir le studio</button>
-    <button class="btn clair" id="oTitre">Retour à l’écran titre</button>
+    <button class="btn clair" id="oHub">Retour au hub</button>
     <button class="btn" id="oFerme">Fermer</button>
     <p class="ver" style="text-align:center;font-size:12px;opacity:.75;margin:10px 0 0">${$('ver').textContent}<br>Conception et direction : Keismey · Développé avec l’aide d’outils IA</p>`,m=>{
     m.querySelector('#oMusV').oninput=e=>MUS.volume(e.target.value/100);
@@ -1434,6 +1436,7 @@ function options(){
     m.querySelector('#oSauve').onclick=()=>{if(window.KS)KS.saveDialog({keys:[SAVE],lang:LANG==='en'?'en':'fr',save:sauver,accent:'#E0A93B'})};
     m.querySelector('#oBug').onclick=()=>{if(window.KS)KS.bug('Baffus Maximus',LANG==='en'?'en':'fr')};
     m.querySelector('#oSoutien').onclick=()=>{if(window.KS)KS.support()};
+    m.querySelector('#oHub').onclick=()=>{sauver();if(window.KSBack)KSBack.toHub()};
     m.querySelector('#oTitre').onclick=()=>{fermerModal();fermerPanneau();montrer('titre');$('bJouer').textContent='Continuer';$('bReset').hidden=false;requestAnimationFrame(animTitre)};
     m.querySelector('#oFerme').onclick=fermerModal;
   });
