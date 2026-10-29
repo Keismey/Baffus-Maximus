@@ -1392,6 +1392,7 @@ function ouvrirDirect(k){const a=ZONES[k]?ZONES[k].a:HOME;COUR.x=COUR.tx=a[0];CO
 function fermerPanneau(){onglet=null;$('sheet').hidden=true;$('voile').hidden=true;COUR.tx=HOME[0];COUR.ty=HOME[1];rendreLudus()}
 /* ---------- notes de mise à jour (la plus récente en premier ; v = VERSION_JEU de src/build.py) ---------- */
 const NOTES_MAJ=[
+  {v:'1.4.2',d:'29 octobre 2026',l:['Le jeu démarre bien plus vite : la page est dix fois plus légère, les images arrivent à part.','Les musiques ne sont téléchargées qu’au moment de les écouter.']},
   {v:'1.4.1',d:'26 octobre 2026',l:['Écran de lancement : « Touche pour commencer », comme dans les autres jeux du studio.','Options : numéro de version et crédits du jeu.']},
   {v:'1.4',d:'19 octobre 2026',l:['Options : réglage du volume de la musique et des bruitages, sauvegarde à exporter ou importer (pour changer d’appareil), signalement de bug et soutien au studio.','Le navigateur est invité à garder ta sauvegarde même quand il fait du ménage.']},
   {v:'1.3',d:'19 octobre 2026',l:['Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il propose d’aller au hub Keismey Studio.']},

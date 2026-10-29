@@ -11,7 +11,7 @@ ou `?lang=fr` / `?lang=en` dans l'adresse.
 
 ## Fichiers
 
-- `index.html` (français), `en.html` (anglais), `sw.js`, `a/titre.webp` — **générés** par `src/build.py`, ne pas les modifier à la main
+- `index.html` (français), `en.html` (anglais), `sw.js`, `a/` (images du jeu, dont `a/titre.webp`) — **générés** par `src/build.py`, ne pas les modifier à la main
 - `manifest.webmanifest` — installation sur téléphone
 - `musique/` — les musiques du jeu
 - `icons/` — icônes de l'appli
@@ -24,7 +24,7 @@ ou `?lang=fr` / `?lang=en` dans l'adresse.
 ## Mettre à jour le jeu
 
 1. Modifier `src/jeu.html`.
-2. Lancer `python3 src/build.py` à la racine du dépôt : ça régénère `index.html`, `en.html` et `sw.js`.
+2. Lancer `python3 src/build.py` à la racine du dépôt : ça régénère `index.html`, `en.html`, `sw.js` et les images de `a/` (sorties de la page pour qu’elle s’affiche vite ; les musiques sont mises en cache au fil de l’écoute).
    Le script liste les textes français sans traduction : les ajouter dans `src/en.py`
    (le nom du cache change à chaque build, donc les joueurs voient « Nouvelle version disponible »).
 3. Pousser sur `main`. GitHub Pages publie depuis la racine de `main`.

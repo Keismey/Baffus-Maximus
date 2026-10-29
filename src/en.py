@@ -101,6 +101,9 @@ TRAD = {
     # --- Écran de lancement, titre, barre du haut
     "Touche pour commencer": "Tap to start",
     "Conception et direction : Keismey · Développé avec l’aide d’outils IA": "Design and direction: Keismey · Developed with the help of AI tools",
+    "29 octobre 2026": "29 October 2026",
+    "Le jeu démarre bien plus vite : la page est dix fois plus légère, les images arrivent à part.": "The game starts much faster: the page is ten times lighter and the pictures come separately.",
+    "Les musiques ne sont téléchargées qu’au moment de les écouter.": "Music is only downloaded when it plays.",
     "26 octobre 2026": "26 October 2026",
     "Écran de lancement : « Touche pour commencer », comme dans les autres jeux du studio.": "Launch screen: “Tap to start”, like the studio’s other games.",
     "Options : numéro de version et crédits du jeu.": "Options: version number and game credits.",
