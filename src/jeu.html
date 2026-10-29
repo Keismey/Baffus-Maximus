@@ -2386,7 +2386,7 @@ function boutonRetour(){
   modal(`<h2>Retour à l’écran titre ?</h2><p>Ta dynastie est enregistrée.</p><button class="btn" id="kOui">Écran titre</button><button class="btn clair petit" id="kNon">Annuler</button>`,
     b=>{b.querySelector('#kNon').onclick=fermerModal;b.querySelector('#kOui').onclick=retourTitre});
 }
-if(window.KSBack)KSBack.init({back:boutonRetour,lang:()=>LANG==='en'?'en':'fr'});
+if(window.KSBack)KSBack.init({back:boutonRetour,lang:()=>LANG==='en'?'en':'fr',title:()=>!$('titre').hidden&&$('modal').hidden});
 function boot(){
   S=charger()||nouvelEtat();migrer();traduireSauvegarde();
   if(S.g&&S.g.retraite){/* reprise d'une retraite interrompue */}
