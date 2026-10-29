@@ -86,6 +86,8 @@ TRAD = {
     "Quitter Baffus Maximus ?": "Leave Baffus Maximus?",
     "Ta dynastie est enregistrée. Tu retrouveras les autres jeux de Keismey Studio sur le hub.": "Your dynasty is saved. You will find the other Keismey Studio games on the hub.",
     "Aller au hub": "Go to the hub",
+    "Retour au hub": "Back to the hub",
+    "Options : bouton « Retour au hub », et le même ordre que dans les autres jeux du studio.": "Options: a “Back to the hub” button, in the same order as the studio’s other games.",
     "Retour à l’écran titre ?": "Back to the title screen?",
     "Ta dynastie est enregistrée.": "Your dynasty is saved.",
     "Écran titre": "Title screen",
