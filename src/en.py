@@ -80,6 +80,7 @@ CONTEXTE = [
 
 TRAD = {
     "19 octobre 2026": "19 October 2026",
+    "31 octobre 2026": "31 October 2026",
     "Options : réglage du volume de la musique et des bruitages, sauvegarde à exporter ou importer (pour changer d’appareil), signalement de bug et soutien au studio.": "Options: music and sound effects volume, a save you can export or import (to switch devices), bug reports and studio support.",
     "Le navigateur est invité à garder ta sauvegarde même quand il fait du ménage.": "The browser is asked to keep your save even when it clears space.",
     "Le bouton retour du téléphone ne quitte plus le jeu d’un coup : il ferme les fenêtres et les panneaux, puis propose de revenir à l’écran titre. Depuis l’écran titre, il propose d’aller au hub Keismey Studio.": "The phone’s back button no longer leaves the game at once: it closes windows and panels, then offers to go back to the title screen. From the title screen, it offers to go to the Keismey Studio hub.",
@@ -104,6 +105,10 @@ TRAD = {
     "Touche pour commencer": "Tap to start",
     "Conception et direction : Keismey · Développé avec l’aide d’outils IA": "Design and direction: Keismey · Developed with the help of AI tools",
     "29 octobre 2026": "29 October 2026",
+    "Boutons plus faciles à toucher sur téléphone (options, fermer, consignes et vitesse du combat, volume).": "Buttons are easier to tap on phones (options, close, fight orders and speed, volume).",
+    "Combat : le journal n’est plus coupé en haut.": "Fights: the log is no longer cut off at the top.",
+    "Téléphone couché : le jeu demande de le tourner, au lieu de cacher le bouton Jouer.": "Phone held sideways: the game asks you to turn it, instead of hiding the Play button.",
+    "Jouable au clavier : Entrée pour commencer, Tab pour aller d’un lieu du ludus à l’autre, et les fenêtres prennent le focus.": "Keyboard play: Enter to start, Tab to move between ludus places, and windows take the focus.",
     "Le jeu démarre bien plus vite : la page est dix fois plus légère, les images arrivent à part.": "The game starts much faster: the page is ten times lighter and the pictures come separately.",
     "Les musiques ne sont téléchargées qu’au moment de les écouter.": "Music is only downloaded when it plays.",
     "26 octobre 2026": "26 October 2026",
@@ -120,6 +125,7 @@ TRAD = {
     "Défiler vers le bas": "Scroll down",
     "Défiler vers le haut": "Scroll up",
     "Tourne ton téléphone": "Turn your phone",
+    "Lieux du ludus": "Ludus places",
     "Abandonner": "Give up",
     "Passer": "Skip",
     "Série": "Run",
