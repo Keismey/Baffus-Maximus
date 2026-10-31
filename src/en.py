@@ -119,6 +119,7 @@ TRAD = {
     "Fermer": "Close",
     "Défiler vers le bas": "Scroll down",
     "Défiler vers le haut": "Scroll up",
+    "Tourne ton téléphone": "Turn your phone",
     "Abandonner": "Give up",
     "Passer": "Skip",
     "Série": "Run",
