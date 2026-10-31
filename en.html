@@ -279,7 +279,8 @@ button.chip{position:relative}button.chip::after{content:'';position:absolute;in
 #combat .cbhp small{color:#FFF3D6;font-weight:800;text-shadow:0 1px 0 #3A2414}
 #combat .cbbas{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 8px calc(8px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px}
 #combat .logbox{background:var(--i-planche) center/100% 100%;padding:12px 14px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
-#combat #cbLog{height:84px;background:linear-gradient(#FBF0D6,#F1DFB6);border:2.5px solid #3A2414;border-radius:10px;box-shadow:inset 0 0 12px rgba(122,74,38,.35);padding:6px 12px;color:#3A2414;padding:0;font-size:12.5px;line-height:1.4}
+#combat #cbLog{height:84px;background:linear-gradient(#FBF0D6,#F1DFB6);border:2.5px solid #3A2414;border-radius:10px;box-shadow:inset 0 0 12px rgba(122,74,38,.35);padding:4px 12px;color:#3A2414;font-size:12.5px;line-height:1.4;position:relative}
+#combat #cbLog::before{content:'';position:absolute;left:0;right:0;top:0;height:16px;background:linear-gradient(#FBF0D6,#FBF0D600);border-radius:8px 8px 0 0;z-index:1;pointer-events:none}
 #combat .cbctl{background:none;padding:0;gap:6px}
 #combat .cbctl .btn{background:var(--i-planche) center/100% 100%;border:0;box-shadow:none;color:#FFF3D6;text-shadow:0 2px 0 #3A2414;font-size:16px;padding:10px 4px;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}
 #combat .cbctl .btn.on{color:#FFD34D;transform:translateY(2px);filter:brightness(1.15) drop-shadow(0 2px 2px rgba(0,0,0,.35))}
