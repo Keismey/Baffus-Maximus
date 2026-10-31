@@ -109,6 +109,7 @@ TRAD = {
     "Combat : le journal n’est plus coupé en haut.": "Fights: the log is no longer cut off at the top.",
     "Téléphone couché : le jeu demande de le tourner, au lieu de cacher le bouton Jouer.": "Phone held sideways: the game asks you to turn it, instead of hiding the Play button.",
     "Jouable au clavier : Entrée pour commencer, Tab pour aller d’un lieu du ludus à l’autre, et les fenêtres prennent le focus.": "Keyboard play: Enter to start, Tab to move between ludus places, and windows take the focus.",
+    "Textes plus grands dans les panneaux, les bulles et les astuces, pour lire sans plisser les yeux.": "Bigger text in panels, speech bubbles and tips, so you can read without squinting.",
     "Le jeu démarre bien plus vite : la page est dix fois plus légère, les images arrivent à part.": "The game starts much faster: the page is ten times lighter and the pictures come separately.",
     "Les musiques ne sont téléchargées qu’au moment de les écouter.": "Music is only downloaded when it plays.",
     "26 octobre 2026": "26 October 2026",
