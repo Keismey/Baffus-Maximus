@@ -1,6 +1,6 @@
 // Baffus Maximus — service worker (généré par src/build.py depuis src/sw.template.js, ne pas modifier sw.js à la main).
 // Met tout le jeu en cache pour jouer hors ligne (les musiques au fil de l'écoute) ; une nouvelle version propose « Mettre à jour ».
-const VERSION = 'baffus-1.4.2-9e9bf640';
+const VERSION = 'baffus-1.4.3-c13a6bbd';
 const CORE = [
   './',
   './index.html',
