@@ -21,7 +21,7 @@ RACINE = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RACINE / 'src'))
 import i18n, en as EN
 
-VERSION_JEU = '1.4.3'
+VERSION_JEU = '1.4.4'
 SRC = (RACINE / 'src' / 'jeu.html').read_text(encoding='utf-8')
 
 # Suivi Cloudflare Web Analytics (version publiée uniquement, pas l'aperçu de test)
